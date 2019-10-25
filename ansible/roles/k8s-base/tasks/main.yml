@@ -71,14 +71,30 @@
   when: ansible_distribution == 'Ubuntu'
   become: yes
   apt:
-    name: "{{ item }}"
+    name: ['docker.io', 'kubelet', 'kubeadm', 'kubectl', 'kubernetes-cni']
     state: latest
-  with_items:
-    - docker.io
-    - kubelet
-    - kubeadm
-    - kubectl
-    - kubernetes-cni
+  tags:
+    - k8s
+
+#- name: Ensure Base Kubernetes
+#  when: ansible_distribution == 'Ubuntu'
+#  become: yes
+#  apt:
+#    name: "{{ item }}"
+#    state: latest
+#  with_items:
+#    - docker.io
+#    - kubelet
+#    - kubeadm
+#    - kubectl
+#    - kubernetes-cni
+#  tags:
+#    - k8s
+
+- name: Configure docker daemon
+  when: ansible_distribution == 'Ubuntu'
+  become: yes
+  shell: bash /vagrant/scripts/daemon.json.sh
   tags:
     - k8s
 
