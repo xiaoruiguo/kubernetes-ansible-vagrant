@@ -6,7 +6,7 @@ boxes = {
   centos: "centos/7",
 }
 
-distro = :centos # :ubuntu
+distro = :ubuntu # :centos #
 
 Vagrant.configure(2) do |config|
 
@@ -36,5 +36,10 @@ Vagrant.configure(2) do |config|
   if Vagrant.has_plugin?("vagrant-cachier")
     config.cache.scope = :box
   end
+
+  config.vm.provision "shell", inline: <<-SHELL
+    sed -i 's/archive.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list
+    sed -i 's/security.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list
+  SHELL
 
 end
